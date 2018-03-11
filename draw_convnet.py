@@ -171,6 +171,7 @@ if __name__ == '__main__':
     size_list = [(a, a), (a-convFilterSize[0]+1, a-convFilterSize[0]+1), (b, b), (b-convFilterSize[1]+1, b-convFilterSize[1]+1), (c, c)]#, (c-convFilterSize[2]+1, c-convFilterSize[2]+1), (d, d), (d-convFilterSize[3]+1, d-convFilterSize[3]+1)]
     print(len(size_list))
     num_list = [1, 30, 30, 50, 50] # Number of feature maps
+
     x_diff_list = [0, layer_width+a, layer_width+a-convFilterSize[0], layer_width+b, layer_width+b-convFilterSize[1]+1] # Seperation between each map
     text_list = ['Inputs'] + ['Feature\nmaps'] * (len(size_list) - 1)
     loc_diff_list = [[3, -3]] * len(size_list)
