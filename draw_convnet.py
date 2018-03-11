@@ -162,13 +162,13 @@ if __name__ == '__main__':
     layer_sizes = [385, 191, 94]
     convFilterSize = [3,3]
     lowerTextVerticalOffset = -460
-    size_list = []
-    for i in range(len(layer_sizes)):
-        size_list.append((layer_sizes[i], layer_sizes[i]))
+    size_list = [(layer_sizes[0],layer_sizes[0])]
+    for i in range(len(layer_sizes)-1):
         size_list.append((layer_sizes[i]-convFilterSize[0]+1, layer_sizes[i]-convFilterSize[0]+1))
+        size_list.append((layer_sizes[i+1], layer_sizes[i+1]))
 
     #size_list = [(a, a), (a-convFilterSize[0]+1, a-convFilterSize[0]+1), ((a-convFilterSize[0]+1)//2, (a-convFilterSize[0]+1)//2), (b-convFilterSize[1]+1, b-convFilterSize[1]+1), (c, c)] # Resolution of each map
-    size_list = [(a, a), (a-convFilterSize[0]+1, a-convFilterSize[0]+1), (b, b), (b-convFilterSize[1]+1, b-convFilterSize[1]+1), (c, c)]#, (c-convFilterSize[2]+1, c-convFilterSize[2]+1), (d, d), (d-convFilterSize[3]+1, d-convFilterSize[3]+1)]
+    #size_list = [(a, a), (a-convFilterSize[0]+1, a-convFilterSize[0]+1), (b, b), (b-convFilterSize[1]+1, b-convFilterSize[1]+1), (c, c)]#, (c-convFilterSize[2]+1, c-convFilterSize[2]+1), (d, d), (d-convFilterSize[3]+1, d-convFilterSize[3]+1)]
     print(len(size_list))
     num_list = [1, 30, 30, 50, 50] # Number of feature maps
 
