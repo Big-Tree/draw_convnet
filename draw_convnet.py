@@ -155,19 +155,19 @@ if __name__ == '__main__':
 
     ############################
     # conv layers
-    layer_sizes = [385, 191, 94] # Resolution of the layer. It is assumed that max pooling will accur between each layer
-    convFilterSize = [3,3]
+    layer_sizes = [385, 191, 94, 46, 22] # Resolution of the layer. It is assumed that max pooling will accur between each layer
+    convFilterSize = [3,3,3,3]
     lowerTextVerticalOffset = -460
+    num_list = [1, 32, 32, 32, 32, 32, 32, 32, 32] # Number of feature maps
+
     #Define the resolution of each layer
     size_list = [(layer_sizes[0],layer_sizes[0])]
     for i in range(len(layer_sizes)-1):
-        size_list.append((layer_sizes[i]-convFilterSize[0]+1, layer_sizes[i]-convFilterSize[0]+1))
+        size_list.append((layer_sizes[i]-convFilterSize[i]+1, layer_sizes[i]-convFilterSize[i]+1))
         size_list.append((layer_sizes[i+1], layer_sizes[i+1]))
 
-    print(len(size_list))
-    num_list = [1, 30, 30, 50, 50] # Number of feature maps
-
-    # Seperation between ecah maps
+    print('len(size_list) = ', len(size_list))
+    # Seperation between each maps
     x_diff_list = [0]
     for i in range(len(layer_sizes)-1):
         x_diff_list.append(layer_width+layer_sizes[i])
@@ -196,11 +196,11 @@ if __name__ == '__main__':
 
     ############################
     # in between layers
-    start_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]] # Alters the postions of the filter lines
-    end_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]] # Alters the positions of the filter lines
-    patch_size_list = [(3, 3), (2, 2), (3, 3), (2, 2)] # Filter size for the tiny square
+    start_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]] # Alters the postions of the filter lines
+    end_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]] # Alters the positions of the filter lines
+    patch_size_list = [(3, 3), (3, 3), (3, 3), (3, 3), (3, 3), (3, 3), (3, 3), (3, 3)] # Filter size for the tiny square
     ind_bgn_list = range(len(patch_size_list))
-    text_list = ['Convolution', 'Max-pooling', 'Convolution', 'Max-pooling']
+    text_list = ['Convolution', 'Max-pooling', 'Convolution', 'Max-pooling', 'Convolution', 'Max-pooling', 'Convolution', 'Max-pooling']
 
     for ind in range(len(patch_size_list)):
         add_mapping(
