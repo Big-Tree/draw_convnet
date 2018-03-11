@@ -40,7 +40,7 @@ from matplotlib.patches import Circle
 
 NumDots = 4
 NumConvMax = 8
-NumFcMax = 20
+NumFcMax = 50
 White = 1.
 Light = 0.7
 Medium = 0.5
@@ -155,9 +155,14 @@ if __name__ == '__main__':
 
     ############################
     # conv layers
-    size_list = [(32, 32), (18, 18), (10, 10), (6, 6), (4, 4)]
-    num_list = [3, 32, 32, 48, 48]
-    x_diff_list = [0, layer_width, layer_width, layer_width, layer_width]
+    a = 385
+    b = 191
+    c = 94
+    convFilterSize = [3,3]
+    lowerTextVerticalOffset = -460
+    size_list = [(a, a), (a-convFilterSize[0]+1, a-convFilterSize[0]+1), ((a-convFilterSize[0]+1)//2, (a-convFilterSize[0]+1)//2), (b-convFilterSize[1]+1, b-convFilterSize[1]+1), (c, c)] # Resolution of each map
+    num_list = [1, 30, 30, 50, 50] # Number of feature maps
+    x_diff_list = [0, layer_width+a, layer_width+a-convFilterSize[0], layer_width+b, layer_width+b-convFilterSize[1]+1] # Seperation between each map
     text_list = ['Inputs'] + ['Feature\nmaps'] * (len(size_list) - 1)
     loc_diff_list = [[3, -3]] * len(size_list)
 
@@ -181,9 +186,9 @@ if __name__ == '__main__':
 
     ############################
     # in between layers
-    start_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]]
-    end_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]]
-    patch_size_list = [(5, 5), (2, 2), (5, 5), (2, 2)]
+    start_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]] # Alters the postions of the filter lines
+    end_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]] # Alters the positions of the filter lines
+    patch_size_list = [(3, 3), (2, 2), (3, 3), (2, 2)] # Filter size for the tiny square
     ind_bgn_list = range(len(patch_size_list))
     text_list = ['Convolution', 'Max-pooling', 'Convolution', 'Max-pooling']
 
@@ -193,16 +198,17 @@ if __name__ == '__main__':
             patch_size_list[ind], ind,
             top_left_list, loc_diff_list, num_show_list, size_list)
         label(top_left_list[ind], text_list[ind] + '\n{}x{} kernel'.format(
-            patch_size_list[ind][0], patch_size_list[ind][1]), xy_off=[26, -65]
+            patch_size_list[ind][0], patch_size_list[ind][1]), xy_off=[100, lowerTextVerticalOffset] # Change the location of the bottom text labels
         )
 
 
     ############################
     # fully connected layers
-    size_list = [(fc_unit_size, fc_unit_size)] * 3
-    num_list = [768, 500, 2]
+    #size_list = [(fc_unit_size, fc_unit_size)] * 1 
+    size_list = [(fc_unit_size, fc_unit_size)] * 2 # Size of squares for fcl * the_number_of_fully_connected_layers
+    num_list = [50*94*94, 2, 2]
     num_show_list = list(map(min, num_list, [NumFcMax] * len(num_list)))
-    x_diff_list = [sum(x_diff_list) + layer_width, layer_width, layer_width]
+    x_diff_list = [sum(x_diff_list) + 100 + layer_width, layer_width+100, layer_width]
     top_left_list = np.c_[np.cumsum(x_diff_list), np.zeros(len(x_diff_list))]
     loc_diff_list = [[fc_unit_size, -fc_unit_size]] * len(top_left_list)
     text_list = ['Hidden\nunits'] * (len(size_list) - 1) + ['Outputs']
@@ -223,10 +229,10 @@ if __name__ == '__main__':
         label(top_left_list[ind], text_list[ind] + '\n{}'.format(
             num_list[ind]))
 
-    text_list = ['Flatten\n', 'Fully\nconnected', 'Fully\nconnected']
+    text_list = ['Flatten', 'Fully\nconnected', 'Fully\nconnected']
 
     for ind in range(len(size_list)):
-        label(top_left_list[ind], text_list[ind], xy_off=[-10, -65])
+        label(top_left_list[ind], text_list[ind], xy_off=[-10, lowerTextVerticalOffset])
 
     ############################
     for patch, color in zip(patches, colors):
