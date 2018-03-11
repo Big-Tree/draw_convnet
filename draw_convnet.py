@@ -155,24 +155,24 @@ if __name__ == '__main__':
 
     ############################
     # conv layers
-    a = 385
-    b = 191
-    c = 94
-    d = 45 
-    layer_sizes = [385, 191, 94]
+    layer_sizes = [385, 191, 94] # Resolution of the layer. It is assumed that max pooling will accur between each layer
     convFilterSize = [3,3]
     lowerTextVerticalOffset = -460
+    #Define the resolution of each layer
     size_list = [(layer_sizes[0],layer_sizes[0])]
     for i in range(len(layer_sizes)-1):
         size_list.append((layer_sizes[i]-convFilterSize[0]+1, layer_sizes[i]-convFilterSize[0]+1))
         size_list.append((layer_sizes[i+1], layer_sizes[i+1]))
 
-    #size_list = [(a, a), (a-convFilterSize[0]+1, a-convFilterSize[0]+1), ((a-convFilterSize[0]+1)//2, (a-convFilterSize[0]+1)//2), (b-convFilterSize[1]+1, b-convFilterSize[1]+1), (c, c)] # Resolution of each map
-    #size_list = [(a, a), (a-convFilterSize[0]+1, a-convFilterSize[0]+1), (b, b), (b-convFilterSize[1]+1, b-convFilterSize[1]+1), (c, c)]#, (c-convFilterSize[2]+1, c-convFilterSize[2]+1), (d, d), (d-convFilterSize[3]+1, d-convFilterSize[3]+1)]
     print(len(size_list))
     num_list = [1, 30, 30, 50, 50] # Number of feature maps
 
-    x_diff_list = [0, layer_width+a, layer_width+a-convFilterSize[0], layer_width+b, layer_width+b-convFilterSize[1]+1] # Seperation between each map
+    # Seperation between ecah maps
+    x_diff_list = [0]
+    for i in range(len(layer_sizes)-1):
+        x_diff_list.append(layer_width+layer_sizes[i])
+        x_diff_list.append(layer_width+layer_sizes[i]-convFilterSize[i])
+
     text_list = ['Inputs'] + ['Feature\nmaps'] * (len(size_list) - 1)
     loc_diff_list = [[3, -3]] * len(size_list)
 
