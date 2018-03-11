@@ -157,7 +157,7 @@ if __name__ == '__main__':
     # conv layers
     layer_sizes = [385, 191, 94, 46, 22] # Resolution of the layer. It is assumed that max pooling will accur between each layer
     convFilterSize = [3,3,3,3]
-    lowerTextVerticalOffset = -460
+    lowerTextVerticalOffset = -470
     num_list = [1, 32, 32, 32, 32, 32, 32, 32, 32] # Number of feature maps
 
     #Define the resolution of each layer
@@ -170,8 +170,13 @@ if __name__ == '__main__':
     # Seperation between each maps
     x_diff_list = [0]
     for i in range(len(layer_sizes)-1):
-        x_diff_list.append(layer_width+layer_sizes[i])
-        x_diff_list.append(layer_width+layer_sizes[i]-convFilterSize[i])
+        if layer_sizes[i] < 150:
+            x_diff_list.append(layer_width+layer_sizes[i] + 0)
+            x_diff_list.append(layer_width+layer_sizes[i]-convFilterSize[i] + 0)
+            
+        x_diff_list.append(layer_width+layer_sizes[i]+0)
+        x_diff_list.append(layer_width+layer_sizes[i]-convFilterSize[i]+0)
+    print(x_diff_list, '\nLayer widith = ', layer_width)
 
     text_list = ['Inputs'] + ['Feature\nmaps'] * (len(size_list) - 1)
     loc_diff_list = [[3, -3]] * len(size_list)
@@ -191,7 +196,7 @@ if __name__ == '__main__':
             add_layer(patches, colors, size=size_list[ind],
                       num=num_show_list[ind],
                       top_left=top_left_list[ind], loc_diff=loc_diff_list[ind])
-        label(top_left_list[ind], text_list[ind] + '\n{}@{}x{}'.format(
+        label(top_left_list[ind], text_list[ind] + '\n{}@\n{}x{}'.format(
             num_list[ind], size_list[ind][0], size_list[ind][1]))
 
     ############################
@@ -200,7 +205,7 @@ if __name__ == '__main__':
     end_ratio_list = [[0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8], [0.4, 0.5], [0.4, 0.8]] # Alters the positions of the filter lines
     patch_size_list = [(3, 3), (3, 3), (3, 3), (3, 3), (3, 3), (3, 3), (3, 3), (3, 3)] # Filter size for the tiny square
     ind_bgn_list = range(len(patch_size_list))
-    text_list = ['Convolution', 'Max-pooling', 'Convolution', 'Max-pooling', 'Convolution', 'Max-pooling', 'Convolution', 'Max-pooling']
+    text_list = ['Convolution', 'Max-pooling', 'Convolution', 'Max-pooling', 'Convol-\nution', 'Max-\npooling', 'Convol-\nution', 'Max-\npooling']
 
     for ind in range(len(patch_size_list)):
         add_mapping(
@@ -218,7 +223,7 @@ if __name__ == '__main__':
     size_list = [(fc_unit_size, fc_unit_size)] * 2 # Size of squares for fcl * the_number_of_fully_connected_layers
     num_list = [50*94*94, 2, 2]
     num_show_list = list(map(min, num_list, [NumFcMax] * len(num_list)))
-    x_diff_list = [sum(x_diff_list) + 100 + layer_width, layer_width+100, layer_width]
+    x_diff_list = [sum(x_diff_list) - 250 + layer_width, layer_width+100, layer_width] # Not sure why but an offset of -250 stops the flatten from zooming away
     top_left_list = np.c_[np.cumsum(x_diff_list), np.zeros(len(x_diff_list))]
     loc_diff_list = [[fc_unit_size, -fc_unit_size]] * len(top_left_list)
     text_list = ['Hidden\nunits'] * (len(size_list) - 1) + ['Outputs']
